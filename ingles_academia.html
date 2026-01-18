@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Exam Practice - Possessives & Prepositions</title>
+    <title>English Exam Practice</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
@@ -48,26 +48,43 @@
 </head>
 <body class="flex items-center justify-center p-4">
 
-    <div id="game-container" class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+    <!-- Mode Selection Screen -->
+    <div id="mode-screen" class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden p-10 text-center">
+        <h2 class="text-4xl font-bold text-blue-800 mb-4">🎮 Elige el modo</h2>
+        <p class="text-gray-600 mb-8">¿Cómo quieres practicar hoy?</p>
+        
+        <div class="space-y-4">
+            <button onclick="startGame(false)" class="w-full bg-blue-500 text-white p-6 rounded-2xl font-bold text-xl hover:bg-blue-600 shadow-lg transform hover:scale-105 transition">
+                📖 Modo Normal
+                <p class="text-sm font-normal mt-1">Primero possessives, luego prepositions</p>
+            </button>
+            
+            <button onclick="startGame(true)" class="w-full bg-purple-500 text-white p-6 rounded-2xl font-bold text-xl hover:bg-purple-600 shadow-lg transform hover:scale-105 transition">
+                🎲 Modo Mezclado
+                <p class="text-sm font-normal mt-1">¡Preguntas en orden aleatorio!</p>
+            </button>
+        </div>
+    </div>
+
+    <div id="game-container" class="hidden bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
         <!-- Header -->
         <div class="bg-yellow-400 p-6 text-center border-b-4 border-yellow-500">
             <h1 class="text-3xl font-bold text-blue-800">🇬🇧 English Adventure 🌟</h1>
             <div class="mt-4 bg-yellow-200 rounded-full h-4 overflow-hidden border-2 border-yellow-600">
                 <div id="progress" class="progress-bar bg-green-500 h-full w-0"></div>
             </div>
-            <p id="stats" class="text-blue-700 font-bold mt-2 text-lg">Cargando...</p>
+            <p id="stats" class="text-blue-700 font-bold mt-2 text-lg">Pregunta 1 de 40</p>
         </div>
 
         <!-- Question Area -->
         <div class="p-8">
             <div id="question-box" class="text-center">
-                <div id="image-placeholder" class="text-6xl mb-4">🏠</div>
+                <div id="image-placeholder" class="text-6xl mb-4">📚</div>
                 <h2 id="question-text" class="text-2xl font-bold text-gray-800 mb-6 italic">
                     Cargando pregunta...
                 </h2>
                 
                 <div id="options-grid" class="grid grid-cols-2 gap-4">
-                    <!-- Buttons will be injected here -->
                 </div>
             </div>
 
@@ -85,17 +102,25 @@
         <h2 class="text-4xl font-bold text-blue-800 mb-4">¡Juego Terminado! 🎉</h2>
         <div id="final-emoji" class="text-6xl mb-6">🏆</div>
         <p class="text-2xl mb-6">Has acertado <span id="final-score" class="font-bold text-green-600">0</span> de <span id="total-questions">0</span></p>
-        <p id="final-message" class="mb-8 text-gray-600 font-bold px-4"></p>
-        <button onclick="location.reload()" class="bg-blue-600 text-white px-10 py-3 rounded-full font-bold text-xl hover:bg-blue-700">¡Intentarlo de nuevo!</button>
+        <p id="final-message" class="mb-6 text-gray-600 font-bold px-4"></p>
+        
+        <div id="review-section" class="hidden mb-6 text-left bg-red-50 p-4 rounded-xl border-2 border-red-300 max-h-60 overflow-y-auto">
+            <h3 class="font-bold text-red-700 mb-2 text-center">📝 Revisa tus errores:</h3>
+            <div id="wrong-list"></div>
+        </div>
+        
+        <div class="flex gap-4 justify-center flex-wrap">
+            <button onclick="location.reload()" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-blue-700">🔄 Intentar de nuevo</button>
+            <button id="review-btn" class="hidden bg-orange-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-orange-700">📚 Repasar errores</button>
+        </div>
     </div>
 
     <script>
-        const quizData = [
-            // --- POSSESSIVE ADJECTIVES (1-20) ---
+        let quizData = [
             { q: "I have a new book. ___ book is interesting.", img: "📖", options: ["My", "His"], correct: "My", explanation: "Usamos 'My' porque el sujeto es 'I' (Yo)." },
             { q: "She has a sister. ___ sister is 8 years old.", img: "👧", options: ["Her", "His"], correct: "Her", explanation: "Usamos 'Her' porque hablamos de una niña (She)." },
             { q: "He has a big dog. ___ dog is brown.", img: "🐕", options: ["Your", "His"], correct: "His", explanation: "Usamos 'His' porque el dueño es un niño (He)." },
-            { q: "The bird is in ___ nest.", img: "🐦", options: ["Its", "Their"], correct: "Its", explanation: "Usamos 'Its' para animales o cosas en singular." },
+            { q: "The bird is in ___ nest.", img: "🦜", options: ["Its", "Their"], correct: "Its", explanation: "Usamos 'Its' para animales o cosas en singular." },
             { q: "We have a house. ___ house is small.", img: "🏠", options: ["Our", "Your"], correct: "Our", explanation: "Usamos 'Our' (nuestro) para nosotros (We)." },
             { q: "They play football. ___ team is the best.", img: "⚽", options: ["Their", "Our"], correct: "Their", explanation: "Usamos 'Their' para ellos (They)." },
             { q: "You have an umbrella. ___ umbrella is yellow.", img: "☂️", options: ["My", "Your"], correct: "Your", explanation: "Si tú tienes algo (You), es 'Your' (tu) paraguas." },
@@ -107,18 +132,16 @@
             { q: "We like ___ English teacher.", img: "👩‍🏫", options: ["Our", "Their"], correct: "Our", explanation: "Nos gusta NUESTRA profesora." },
             { q: "You need to wash ___ hands.", img: "🧼", options: ["Your", "My"], correct: "Your", explanation: "Tú debes lavar TUS manos." },
             { q: "The tree lost ___ leaves in autumn.", img: "🌳", options: ["Its", "Their"], correct: "Its", explanation: "El árbol (cosa singular) perdió SUS hojas." },
-            { q: "They forgot ___ homework at home.", img: "📝", options: ["Your", "Their"], correct: "Their", explanation: "Ellos olvidaron SU tarea." },
+            { q: "They forgot ___ homework at home.", img: "📚", options: ["Your", "Their"], correct: "Their", explanation: "Ellos olvidaron SU tarea." },
             { q: "I am wearing ___ favorite shoes.", img: "👟", options: ["My", "His"], correct: "My", explanation: "Yo llevo puestos MIS zapatos." },
             { q: "The girl is with ___ grandmother.", img: "👵", options: ["Her", "His"], correct: "Her", explanation: "La niña está con SU abuela." },
             { q: "The phone is ringing. ___ screen is broken.", img: "📱", options: ["Its", "My"], correct: "Its", explanation: "La pantalla DEL teléfono (objeto)." },
             { q: "We are painting ___ bedroom blue.", img: "🛏️", options: ["Our", "Their"], correct: "Our", explanation: "Estamos pintando NUESTRO cuarto." },
-
-            // --- PREPOSITIONS: in, on, under, next to, at, with, between (21-40) ---
             { q: "The keys are ___ the table.", img: "🔑", options: ["On", "In"], correct: "On", explanation: "'On' es sobre la superficie." },
             { q: "My dad is ___ work right now.", img: "💼", options: ["At", "On"], correct: "At", explanation: "Usamos 'At' para lugares específicos (at work, at school)." },
             { q: "I am playing ___ my best friend.", img: "👫", options: ["With", "At"], correct: "With", explanation: "'With' significa 'con' (compañía)." },
             { q: "The milk is ___ the fridge.", img: "🥛", options: ["In", "Under"], correct: "In", explanation: "'In' es dentro de un lugar." },
-            { q: "Wait for me ___ the bus stop.", img: "🚏", options: ["At", "On"], correct: "At", explanation: "'At' para puntos exactos como una parada de bus." },
+            { q: "Wait for me ___ the bus stop.", img: "🚌", options: ["At", "On"], correct: "At", explanation: "'At' para puntos exactos como una parada de bus." },
             { q: "I write ___ a pencil.", img: "✏️", options: ["With", "In"], correct: "With", explanation: "Usamos 'With' para indicar el instrumento (con un lápiz)." },
             { q: "The slippers are ___ the bed.", img: "👡", options: ["Under", "At"], correct: "Under", explanation: "'Under' es debajo." },
             { q: "She is ___ school from 9 to 5.", img: "🏫", options: ["At", "With"], correct: "At", explanation: "Estar en el colegio se dice 'At school'." },
@@ -138,60 +161,78 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let wrongAnswers = [];
+        let currentQuizData = [];
 
-        const questionText = document.getElementById('question-text');
-        const optionsGrid = document.getElementById('options-grid');
-        const feedback = document.getElementById('feedback');
-        const feedbackMsg = document.getElementById('feedback-msg');
-        const feedbackExp = document.getElementById('feedback-explanation');
-        const progress = document.getElementById('progress');
-        const stats = document.getElementById('stats');
-        const imgPlaceholder = document.getElementById('image-placeholder');
+        function startGame(mixed) {
+            currentQuizData = [...quizData];
+            
+            if (mixed) {
+                for (let i = currentQuizData.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [currentQuizData[i], currentQuizData[j]] = [currentQuizData[j], currentQuizData[i]];
+                }
+            }
+            
+            document.getElementById('mode-screen').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('hidden');
+            loadQuestion();
+        }
 
         function loadQuestion() {
-            const data = quizData[currentQuestion];
-            questionText.innerHTML = data.q;
-            imgPlaceholder.innerText = data.img;
-            optionsGrid.innerHTML = '';
+            const data = currentQuizData[currentQuestion];
+            document.getElementById('question-text').innerHTML = data.q;
+            document.getElementById('image-placeholder').innerText = data.img;
+            
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
             
             data.options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.innerText = opt;
                 btn.className = "option-btn bg-blue-100 border-2 border-blue-400 p-4 rounded-2xl font-bold text-xl text-blue-800 hover:bg-blue-200 shadow-sm";
                 btn.onclick = () => checkAnswer(opt);
-                optionsGrid.appendChild(btn);
+                grid.appendChild(btn);
             });
 
-            feedback.classList.add('hidden');
-            optionsGrid.classList.remove('hidden');
-            stats.innerText = `Pregunta ${currentQuestion + 1} de ${quizData.length}`;
-            progress.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
+            document.getElementById('feedback').classList.add('hidden');
+            grid.classList.remove('hidden');
+            document.getElementById('stats').innerText = `Pregunta ${currentQuestion + 1} de ${currentQuizData.length}`;
+            document.getElementById('progress').style.width = `${((currentQuestion) / currentQuizData.length) * 100}%`;
         }
 
         function checkAnswer(selected) {
-            const data = quizData[currentQuestion];
+            const data = currentQuizData[currentQuestion];
             const isCorrect = selected === data.correct;
             
-            optionsGrid.classList.add('hidden');
+            document.getElementById('options-grid').classList.add('hidden');
+            const feedback = document.getElementById('feedback');
             feedback.classList.remove('hidden');
 
             if (isCorrect) {
                 score++;
                 feedback.className = "mt-6 p-4 rounded-2xl text-center border-2 border-green-500 bg-green-50 bounce";
-                feedbackMsg.innerText = "✅ ¡GENIAL!";
-                feedbackMsg.className = "text-xl font-bold text-green-600 mb-2";
+                document.getElementById('feedback-msg').innerText = "✅ ¡GENIAL!";
+                document.getElementById('feedback-msg').className = "text-xl font-bold text-green-600 mb-2";
             } else {
+                wrongAnswers.push({
+                    question: data.q,
+                    correct: data.correct,
+                    selected: selected,
+                    explanation: data.explanation,
+                    fullData: data
+                });
                 feedback.className = "mt-6 p-4 rounded-2xl text-center border-2 border-red-500 bg-red-50 shake";
-                feedbackMsg.innerText = "❌ ¡CUIDADO!";
-                feedbackMsg.className = "text-xl font-bold text-red-600 mb-2";
+                document.getElementById('feedback-msg').innerText = "❌ ¡CUIDADO!";
+                document.getElementById('feedback-msg').className = "text-xl font-bold text-red-600 mb-2";
             }
 
-            feedbackExp.innerHTML = `La respuesta correcta es <b>${data.correct}</b>. <br> ${data.explanation}`;
+            document.getElementById('feedback-explanation').innerHTML = `La respuesta correcta es <b>${data.correct}</b>. <br> ${data.explanation}`;
         }
 
         function nextQuestion() {
             currentQuestion++;
-            if (currentQuestion < quizData.length) {
+            if (currentQuestion < currentQuizData.length) {
                 loadQuestion();
             } else {
                 showResults();
@@ -202,30 +243,47 @@
             document.getElementById('game-container').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
             document.getElementById('final-score').innerText = score;
-            document.getElementById('total-questions').innerText = quizData.length;
+            document.getElementById('total-questions').innerText = currentQuizData.length;
             
-            const msg = document.getElementById('final-message');
-            const emoji = document.getElementById('final-emoji');
-            
-            const percentage = (score / quizData.length) * 100;
+            const percentage = (score / currentQuizData.length) * 100;
 
             if (percentage === 100) {
-                msg.innerText = "¡PERFECTO! Has respondido las 40 preguntas correctamente. ¡Eres una estrella!";
-                emoji.innerText = "🏆👑";
+                document.getElementById('final-message').innerText = "¡PERFECTO! Has respondido todas las preguntas correctamente. ¡Eres una estrella!";
+                document.getElementById('final-emoji').innerText = "🏆👑";
             } else if (percentage >= 80) {
-                msg.innerText = "¡Excelente! Estás muy lista para el examen de inglés.";
-                emoji.innerText = "🌟✨";
+                document.getElementById('final-message').innerText = "¡Excelente! Estás muy lista para el examen de inglés.";
+                document.getElementById('final-emoji').innerText = "🌟✨";
             } else if (percentage >= 50) {
-                msg.innerText = "¡Bien hecho! Pero recuerda repasar los fallos para mejorar.";
-                emoji.innerText = "👍📚";
+                document.getElementById('final-message').innerText = "¡Bien hecho! Pero recuerda repasar los fallos para mejorar.";
+                document.getElementById('final-emoji').innerText = "👍📚";
             } else {
-                msg.innerText = "Sigue practicando un poco más. ¡Tú puedes hacerlo!";
-                emoji.innerText = "💪🔋";
+                document.getElementById('final-message').innerText = "Sigue practicando un poco más. ¡Tú puedes hacerlo!";
+                document.getElementById('final-emoji').innerText = "💪📋";
+            }
+
+            if (wrongAnswers.length > 0) {
+                document.getElementById('review-section').classList.remove('hidden');
+                document.getElementById('review-btn').classList.remove('hidden');
+                document.getElementById('wrong-list').innerHTML = wrongAnswers.map((item, i) => `
+                    <div class="mb-3 pb-3 border-b border-red-200 last:border-0">
+                        <p class="text-sm"><b>${i + 1}.</b> ${item.question}</p>
+                        <p class="text-sm text-red-600">Tu respuesta: <b>${item.selected}</b></p>
+                        <p class="text-sm text-green-600">Correcta: <b>${item.correct}</b></p>
+                        <p class="text-xs text-gray-600 italic mt-1">${item.explanation}</p>
+                    </div>
+                `).join('');
+                
+                document.getElementById('review-btn').onclick = () => {
+                    currentQuizData = wrongAnswers.map(wa => wa.fullData);
+                    currentQuestion = 0;
+                    score = 0;
+                    wrongAnswers = [];
+                    document.getElementById('result-screen').classList.add('hidden');
+                    document.getElementById('game-container').classList.remove('hidden');
+                    loadQuestion();
+                };
             }
         }
-
-        // Iniciar
-        window.onload = loadQuestion;
     </script>
 </body>
 </html>
