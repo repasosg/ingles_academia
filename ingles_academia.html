@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Exam Practice - Possessives & Prepositions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+        }
+
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .option-btn:active {
+            transform: scale(0.95);
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .bounce {
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+    <div id="game-container" class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-yellow-400 p-6 text-center border-b-4 border-yellow-500">
+            <h1 class="text-3xl font-bold text-blue-800">🇬🇧 English Adventure 🌟</h1>
+            <div class="mt-4 bg-yellow-200 rounded-full h-4 overflow-hidden border-2 border-yellow-600">
+                <div id="progress" class="progress-bar bg-green-500 h-full w-0"></div>
+            </div>
+            <p id="stats" class="text-blue-700 font-bold mt-2 text-lg">Cargando aventuras...</p>
+        </div>
+
+        <!-- Question Area -->
+        <div class="p-8">
+            <div id="question-box" class="text-center">
+                <div id="image-placeholder" class="text-6xl mb-4">🏠</div>
+                <h2 id="question-text" class="text-2xl font-bold text-gray-800 mb-6 italic">
+                    Cargando pregunta...
+                </h2>
+                
+                <div id="options-grid" class="grid grid-cols-2 gap-4">
+                    <!-- Buttons will be injected here -->
+                </div>
+            </div>
+
+            <!-- Feedback Area -->
+            <div id="feedback" class="hidden mt-6 p-4 rounded-2xl text-center border-2">
+                <p id="feedback-msg" class="text-lg font-bold mb-2"></p>
+                <p id="feedback-explanation" class="text-gray-700 italic"></p>
+                <button id="next-btn" onclick="nextQuestion()" class="mt-4 bg-blue-600 text-white px-8 py-2 rounded-full font-bold hover:bg-blue-700">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Result Screen -->
+    <div id="result-screen" class="hidden bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden p-10 text-center">
+        <h2 class="text-4xl font-bold text-blue-800 mb-4">¡Prueba Finalizada! 🎉</h2>
+        <div id="final-emoji" class="text-6xl mb-6">🏆</div>
+        <p class="text-2xl mb-6">Has acertado <span id="final-score" class="font-bold text-green-600">0</span> de <span id="total-questions">0</span></p>
+        <p id="final-message" class="mb-8 text-gray-600 font-bold text-lg"></p>
+        <button onclick="location.reload()" class="bg-blue-600 text-white px-10 py-3 rounded-full font-bold text-xl hover:bg-blue-700 shadow-lg">¡Intentar otra vez!</button>
+    </div>
+
+    <script>
+        const quizData = [
+            // --- POSSESSIVE ADJECTIVES (1-20) ---
+            { q: "I have a new book. ___ book is interesting.", img: "📖", options: ["My", "Your"], correct: "My", explanation: "Usamos 'My' porque yo (I) soy el dueño." },
+            { q: "She has a brother. ___ brother is tall.", img: "👦", options: ["Her", "His"], correct: "Her", explanation: "Usamos 'Her' para hablar de algo que le pertenece a una niña (She)." },
+            { q: "He has a big dog. ___ dog is friendly.", img: "🐕", options: ["His", "Her"], correct: "His", explanation: "Usamos 'His' para algo que le pertenece a un niño (He)." },
+            { q: "The bird is in ___ nest.", img: "🐦", options: ["Its", "Their"], correct: "Its", explanation: "Usamos 'Its' para animales u objetos en singular." },
+            { q: "We have a house. ___ house is small.", img: "🏠", options: ["Our", "Their"], correct: "Our", explanation: "Usamos 'Our' (nuestro) cuando los dueños somos nosotros (We)." },
+            { q: "They have a car. ___ car is fast.", img: "🏎️", options: ["Your", "Their"], correct: "Their", explanation: "Usamos 'Their' para hablar de algo que es de ellos (They)." },
+            { q: "You have a pen. Is it ___ pen?", img: "🖋️", options: ["Your", "My"], correct: "Your", explanation: "Si tú (You) tienes el boli, es tu (Your) boli." },
+            { q: "Mary has a doll. ___ doll is beautiful.", img: "🪆", options: ["Her", "His"], correct: "Her", explanation: "Mary es 'She', por eso usamos 'Her'." },
+            { q: "Peter has a blue ball. ___ ball is blue.", img: "🔵", options: ["His", "Her"], correct: "His", explanation: "Peter es 'He', por eso usamos 'His'." },
+            { q: "The cat has a long tail. ___ tail is black.", img: "🐈", options: ["Its", "Our"], correct: "Its", explanation: "Es la cola del gato (objeto/animal), usamos 'Its'." },
+            { q: "We love ___ school.", img: "🏫", options: ["Our", "Their"], correct: "Our", explanation: "Si nosotros (We) la amamos, es nuestra (Our) escuela." },
+            { q: "The students have books. ___ books are on the desk.", img: "📚", options: ["Their", "Your"], correct: "Their", explanation: "Los estudiantes son 'ellos' (They), usamos 'Their'." },
+            { q: "I am wearing ___ favorite T-shirt.", img: "👕", options: ["My", "His"], correct: "My", explanation: "Si la llevo puesta yo (I), es mi (My) camiseta." },
+            { q: "You and your sister have a cat. ___ cat is cute.", img: "🐱", options: ["Your", "Our"], correct: "Your", explanation: "Hablamos de 'vosotros' (You), por eso usamos 'Your'." },
+            { q: "My father has a computer. ___ computer is new.", img: "💻", options: ["His", "Her"], correct: "His", explanation: "Padre es masculino (He), usamos 'His'." },
+            { q: "The tree has flowers. ___ flowers are pink.", img: "🌸", options: ["Its", "Their"], correct: "Its", explanation: "Un árbol es una cosa singular, usamos 'Its'." },
+            { q: "The girls have umbrellas. ___ umbrellas are wet.", img: "☔", options: ["Their", "Her"], correct: "Their", explanation: "Son varias niñas (They), usamos 'Their'." },
+            { q: "Tom and I have a secret. ___ secret is safe.", img: "🤫", options: ["Our", "My"], correct: "Our", explanation: "Tom y yo somos 'nosotros' (We), usamos 'Our'." },
+            { q: "She is brushing ___ teeth.", img: "🪥", options: ["Her", "His"], correct: "Her", explanation: "Ella (She) se cepilla sus (Her) dientes." },
+            { q: "Do you have ___ homework?", img: "📝", options: ["Your", "My"], correct: "Your", explanation: "Te pregunto si tú (You) tienes tu (Your) tarea." },
+
+            // --- PREPOSITIONS (21-40) ---
+            { q: "The ball is ___ the box.", img: "📦⚽", options: ["In", "On"], correct: "In", explanation: "'In' significa que está dentro." },
+            { q: "The book is ___ the table.", img: "📕🪜", options: ["On", "Under"], correct: "On", explanation: "'On' significa sobre la superficie." },
+            { q: "The shoes are ___ the bed.", img: "👞🛌", options: ["Under", "In"], correct: "Under", explanation: "'Under' significa debajo de la cama." },
+            { q: "The teacher is standing ___ the board.", img: "👩‍🏫⬜", options: ["Next to", "Between"], correct: "Next to", explanation: "'Next to' significa al lado de." },
+            { q: "The apple is ___ the two boxes.", img: "📦🍎📦", options: ["Between", "In"], correct: "Between", explanation: "'Between' se usa cuando algo está en medio de dos cosas." },
+            { q: "The boy is ___ the TV.", img: "👦📺", options: ["In front of", "Under"], correct: "In front of", explanation: "'In front of' significa delante de la televisión." },
+            { q: "The milk is ___ the fridge.", img: "🥛🧊", options: ["In", "On"], correct: "In", explanation: "La leche está dentro (In) de la nevera." },
+            { q: "The clock is ___ the wall.", img: "🕐🧱", options: ["On", "In"], correct: "On", explanation: "En superficies verticales como paredes usamos 'On'." },
+            { q: "The car is ___ the garage.", img: "🚗🏠", options: ["In", "Under"], correct: "In", explanation: "El coche está dentro (In) del garaje." },
+            { q: "The keys are ___ the sofa.", img: "🔑🛋️", options: ["Next to", "Between"], correct: "Next to", explanation: "Están al lado (Next to) del sofá." },
+            { q: "The ruler is ___ the pencil and the pen.", img: "✏️📏🖊️", options: ["Between", "On"], correct: "Between", explanation: "Está en medio de dos objetos, usamos 'Between'." },
+            { q: "The carpet is ___ the floor.", img: "🧶🏢", options: ["On", "Under"], correct: "On", explanation: "La alfombra está sobre (On) el suelo." },
+            { q: "The cat is hiding ___ the chair.", img: "🪑🐈", options: ["Under", "In front of"], correct: "Under", explanation: "Se esconde debajo (Under) de la silla." },
+            { q: "The supermarket is ___ the cinema.", img: "🛒🎬", options: ["Next to", "On"], correct: "Next to", explanation: "Está al lado (Next to) del cine." },
+            { q: "The flowers are ___ the vase.", img: "🏺🌻", options: ["In", "Under"], correct: "In", explanation: "Las flores están dentro (In) del jarrón." },
+            { q: "The computer is ___ the desk.", img: "🖥️table", options: ["On", "In"], correct: "On", explanation: "El ordenador está sobre (On) la mesa." },
+            { q: "The baby is sitting ___ the parents.", img: "👨‍👩‍👧", options: ["Between", "On"], correct: "Between", explanation: "El bebé está en medio (Between) de sus padres." },
+            { q: "The remote control is ___ the TV.", img: "🕹️📺", options: ["In front of", "In"], correct: "In front of", explanation: "Está delante (In front of) de la tele." },
+            { q: "The lamp is ___ the bed.", img: "🛌💡", options: ["Next to", "Between"], correct: "Next to", explanation: "Está al lado (Next to) de la cama." },
+            { q: "The bread is ___ the basket.", img: "🧺🥖", options: ["In", "On"], correct: "In", explanation: "El pan está dentro (In) de la cesta." }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        const questionText = document.getElementById('question-text');
+        const optionsGrid = document.getElementById('options-grid');
+        const feedback = document.getElementById('feedback');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const feedbackExp = document.getElementById('feedback-explanation');
+        const progress = document.getElementById('progress');
+        const stats = document.getElementById('stats');
+        const imgPlaceholder = document.getElementById('image-placeholder');
+
+        function loadQuestion() {
+            const data = quizData[currentQuestion];
+            questionText.innerHTML = data.q;
+            imgPlaceholder.innerText = data.img;
+            optionsGrid.innerHTML = '';
+            
+            data.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.innerText = opt;
+                btn.className = "option-btn bg-blue-100 border-2 border-blue-400 p-4 rounded-2xl font-bold text-xl text-blue-800 hover:bg-blue-200 shadow-md";
+                btn.onclick = () => checkAnswer(opt);
+                optionsGrid.appendChild(btn);
+            });
+
+            feedback.classList.add('hidden');
+            optionsGrid.classList.remove('hidden');
+            stats.innerText = `Pregunta ${currentQuestion + 1} de ${quizData.length}`;
+            progress.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
+        }
+
+        function checkAnswer(selected) {
+            const data = quizData[currentQuestion];
+            const isCorrect = selected === data.correct;
+            
+            optionsGrid.classList.add('hidden');
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                score++;
+                feedback.className = "mt-6 p-4 rounded-2xl text-center border-2 border-green-500 bg-green-50 bounce";
+                feedbackMsg.innerText = "✅ ¡GENIAL!";
+                feedbackMsg.className = "text-xl font-bold text-green-600 mb-2";
+            } else {
+                feedback.className = "mt-6 p-4 rounded-2xl text-center border-2 border-red-500 bg-red-50 shake";
+                feedbackMsg.innerText = "❌ ¡VAYA!";
+                feedbackMsg.className = "text-xl font-bold text-red-600 mb-2";
+            }
+
+            feedbackExp.innerHTML = `La respuesta correcta es <b>${data.correct}</b>. <br> ${data.explanation}`;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('total-questions').innerText = quizData.length;
+            
+            const msg = document.getElementById('final-message');
+            const emoji = document.getElementById('final-emoji');
+            
+            const percentage = (score / quizData.length) * 100;
+
+            if (percentage === 100) {
+                msg.innerText = "¡Nivel Experto! Has dominado el inglés. ¡Ese 10 está asegurado!";
+                emoji.innerText = "👑";
+            } else if (percentage >= 80) {
+                msg.innerText = "¡Excelente trabajo! Estás muy preparada para el examen.";
+                emoji.innerText = "🌟";
+            } else if (percentage >= 50) {
+                msg.innerText = "¡Buen esfuerzo! Repasa un poco más las explicaciones y lo lograrás.";
+                emoji.innerText = "👍";
+            } else {
+                msg.innerText = "¡No te rindas! Vuelve a jugar para aprender todas las respuestas.";
+                emoji.innerText = "💪";
+            }
+        }
+
+        // Iniciar el juego al cargar
+        loadQuestion();
+    </script>
+</body>
+</html>
