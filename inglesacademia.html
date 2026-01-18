@@ -1,231 +1,554 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="dark" lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Exam Practice - Possessives & Prepositions</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>HAWKINS LAB - MENSAJE DECODIFICADO</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Teko:wght@400;600&family=Space+Mono&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#33ff33",
+                        "background-dark": "#181111",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "terminal": ["Teko", "sans-serif"],
+                        "mono": ["Space Mono", "monospace"]
+                    },
+                },
+            },
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
-        
         body {
-            font-family: 'Comic Neue', cursive;
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            background: radial-gradient(circle at center, #1a2210 0%, #000000 100%);
             min-height: 100vh;
+            touch-action: manipulation;
         }
-
-        .option-btn {
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .perspective-grid {
+            perspective: 500px;
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 30vh; z-index: 0;
+            overflow: hidden; opacity: 0.15;
         }
-
-        .option-btn:active {
-            transform: scale(0.95);
+        .grid-lines {
+            width: 200%; height: 200%;
+            background-image: linear-gradient(to right, #33ff33 1px, transparent 1px), linear-gradient(to bottom, #33ff33 1px, transparent 1px);
+            background-size: 50px 50px; transform: rotateX(60deg) translateY(-50%) translateX(-25%);
+            transform-origin: center top;
+            mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
         }
-
-        .progress-bar {
-            transition: width 0.5s ease-in-out;
+        .crt-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none; z-index: 50;
         }
-
-        .shake {
-            animation: shake 0.5s;
+        .flicker { animation: flicker 0.15s infinite; }
+        @keyframes flicker { 0% { opacity: 0.97; } 50% { opacity: 1; } 100% { opacity: 0.98; } }
+        
+        .light-flicker {
+            animation: lightFlicker 3s infinite;
         }
-
-        @keyframes shake {
+        @keyframes lightFlicker {
+            0%, 100% { opacity: 1; }
+            10% { opacity: 0.3; }
+            12% { opacity: 1; }
+            25% { opacity: 0.5; }
+            27% { opacity: 1; }
+            45% { opacity: 0.2; }
+            47% { opacity: 1; }
+            60% { opacity: 0.6; }
+            62% { opacity: 1; }
+            80% { opacity: 0.4; }
+            82% { opacity: 1; }
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .static-noise {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+            pointer-events: none;
+            z-index: 45;
+            animation: staticMove 0.2s steps(10) infinite;
+        }
+        
+        @keyframes staticMove {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(-10%, 5%); }
+            30% { transform: translate(5%, -10%); }
+            40% { transform: translate(-5%, 15%); }
+            50% { transform: translate(-10%, 5%); }
+            60% { transform: translate(15%, 0); }
+            70% { transform: translate(0, 10%); }
+            80% { transform: translate(-15%, 0); }
+            90% { transform: translate(10%, 5%); }
+            100% { transform: translate(5%, 0); }
+        }
+        
+        .glow-green { text-shadow: 0 0 10px #33ff33, 0 0 20px #33ff33; }
+        .border-green { 
+            border: 2px solid #33ff33; 
+            box-shadow: 0 0 20px rgba(51, 255, 51, 0.4);
+            animation: borderPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes borderPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(51, 255, 51, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(51, 255, 51, 0.6), 0 0 40px rgba(51, 255, 51, 0.3);
+            }
+        }
+        
+        .cursor-blink {
+            display: inline-block;
+            width: 8px;
+            height: 1.2em;
+            background-color: #33ff33;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink { 
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; } 
+        }
+        
+        .success-glow {
+            animation: successGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes successGlow {
+            0%, 100% { 
+                text-shadow: 0 0 10px #33ff33;
+            }
+            50% { 
+                text-shadow: 0 0 20px #33ff33, 0 0 30px #33ff33, 0 0 40px #33ff33;
+            }
+        }
+        
+        .glitch-effect {
+            animation: glitchDestroy 0.5s ease-in-out;
+        }
+        
+        @keyframes glitchDestroy {
+            0% { 
+                transform: translate(0);
+                filter: hue-rotate(0deg);
+            }
+            20% { 
+                transform: translate(-10px, 5px);
+                filter: hue-rotate(90deg);
+                opacity: 0.8;
+            }
+            40% { 
+                transform: translate(10px, -5px);
+                filter: hue-rotate(180deg);
+                opacity: 0.6;
+            }
+            60% { 
+                transform: translate(-5px, 10px);
+                filter: hue-rotate(270deg);
+                opacity: 0.4;
+            }
+            80% { 
+                transform: translate(5px, -10px) scale(0.9);
+                filter: hue-rotate(360deg) blur(5px);
+                opacity: 0.2;
+            }
+            100% { 
+                transform: scale(0) rotate(180deg);
+                filter: blur(20px);
+                opacity: 0;
+            }
+        }
+        
+        .screen-distortion {
+            animation: screenDistortion 8s ease-in-out infinite;
+        }
+        
+        @keyframes screenDistortion {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            10% { transform: translateX(-1px); }
+            20% { transform: translateX(1px); }
+            30% { transform: translateX(-1px); }
+            40% { transform: translateX(1px); }
+            50% { transform: translateX(0); }
         }
-
-        .bounce {
-            animation: bounce 0.5s;
+        
+        .upside-down-warning {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: rgba(51, 255, 51, 0.3);
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            z-index: 5;
+            animation: warningPulse 6s ease-in-out infinite;
+            pointer-events: none;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
         }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        
+        @keyframes warningPulse {
+            0%, 85%, 100% { opacity: 0; }
+            90%, 95% { opacity: 0.4; }
+        }
+        
+        .electricity-crack {
+            position: fixed;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, #33ff33, transparent);
+            opacity: 0;
+            animation: electricityCrack 10s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 55;
+        }
+        
+        @keyframes electricityCrack {
+            0%, 94%, 100% { opacity: 0; height: 0; }
+            95% { opacity: 1; height: 100vh; }
+            96% { opacity: 0; height: 100vh; }
+            97% { opacity: 1; height: 100vh; }
+            98% { opacity: 0; }
+        }
+        
+        .vhs-tracking {
+            animation: vhsTracking 0.5s ease-in-out;
+        }
+        
+        @keyframes vhsTracking {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-20px); }
+            20% { transform: translateX(15px); }
+            30% { transform: translateX(-10px); }
+            40% { transform: translateX(8px); }
+            50% { transform: translateX(-5px); }
+            60% { transform: translateX(3px); }
+        }
+        
+        .dimensional-shift {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, transparent 40%, rgba(51, 255, 51, 0.05) 100%);
+            opacity: 0;
+            animation: dimensionalShift 12s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 48;
+        }
+        
+        @keyframes dimensionalShift {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .reading-minds {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            font-size: 9px;
+            color: rgba(51, 255, 51, 0.25);
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            z-index: 60;
+            animation: mindReading 15s ease-in-out infinite;
+            max-width: 150px;
+            text-align: right;
+        }
+        
+        @keyframes mindReading {
+            0%, 80%, 100% { opacity: 0; }
+            85%, 95% { opacity: 0.5; }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+            .upside-down-warning {
+                font-size: 10px;
+                letter-spacing: 0.3em;
+            }
+            .reading-minds {
+                font-size: 8px;
+                bottom: 60px;
+                right: 10px;
+            }
         }
     </style>
 </head>
-<body class="flex items-center justify-center p-4">
+<body class="bg-background-dark font-display text-white selection:bg-primary selection:text-black">
+    <div class="crt-overlay"></div>
+    <div class="static-noise"></div>
+    <div class="dimensional-shift"></div>
+    <div class="perspective-grid"><div class="grid-lines"></div></div>
+    
+    <div class="upside-down-warning">DIMENSIONAL BREACH DETECTED</div>
+    <div class="reading-minds">◈ Subject's thoughts monitored ◈</div>
+    <div class="electricity-crack" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="electricity-crack" style="left: 60%; animation-delay: 5s;"></div>
+    <div class="electricity-crack" style="left: 80%; animation-delay: 8s;"></div>
 
-    <div id="game-container" class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
-        <!-- Header -->
-        <div class="bg-yellow-400 p-6 text-center border-b-4 border-yellow-500">
-            <h1 class="text-3xl font-bold text-blue-800">🇬🇧 English Adventure 🌟</h1>
-            <div class="mt-4 bg-yellow-200 rounded-full h-4 overflow-hidden border-2 border-yellow-600">
-                <div id="progress" class="progress-bar bg-green-500 h-full w-0"></div>
-            </div>
-            <p id="stats" class="text-blue-700 font-bold mt-2 text-lg">Cargando...</p>
-        </div>
-
-        <!-- Question Area -->
-        <div class="p-8">
-            <div id="question-box" class="text-center">
-                <div id="image-placeholder" class="text-6xl mb-4">🏠</div>
-                <h2 id="question-text" class="text-2xl font-bold text-gray-800 mb-6 italic">
-                    Cargando pregunta...
-                </h2>
-                
-                <div id="options-grid" class="grid grid-cols-2 gap-4">
-                    <!-- Buttons will be injected here -->
+    <div class="relative z-10 flex min-h-screen w-full flex-col p-4 md:p-10">
+        <div class="layout-container flex grow flex-col max-w-[1000px] mx-auto w-full pb-8">
+            
+            <header class="flex items-center justify-between border-b border-primary/40 px-4 py-4 bg-background-dark/80 backdrop-blur-sm">
+                <div class="flex items-center gap-4">
+                    <div class="text-primary flicker">
+                        <svg class="size-8" fill="none" viewBox="0 0 48 48"><path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-primary text-[12px] font-bold tracking-[0.2em] uppercase leading-none">Hawkins National Laboratory</h2>
+                        <span class="text-[9px] text-primary/60 tracking-widest uppercase">Division 4 // Subject: Laia</span>
+                    </div>
                 </div>
-            </div>
+                <div class="flex items-center gap-3">
+                    <span class="size-2 rounded-full bg-primary animate-pulse light-flicker"></span>
+                    <span class="text-primary text-[10px] font-bold tracking-widest light-flicker">ACCESS GRANTED</span>
+                </div>
+            </header>
 
-            <!-- Feedback Area -->
-            <div id="feedback" class="hidden mt-6 p-4 rounded-2xl text-center border-2">
-                <p id="feedback-msg" class="text-lg font-bold mb-2"></p>
-                <p id="feedback-explanation" class="text-gray-700 italic"></p>
-                <button id="next-btn" onclick="nextQuestion()" class="mt-4 bg-blue-600 text-white px-8 py-2 rounded-full font-bold hover:bg-blue-700">Siguiente →</button>
-            </div>
+            <main class="flex-1 flex flex-col items-center justify-center gap-6 py-8 screen-distortion">
+                <div class="text-center space-y-2 mb-4">
+                    <p class="font-mono text-[10px] text-primary tracking-[0.4em] uppercase opacity-70 success-glow">✓ Identificación Confirmada</p>
+                    <h1 class="text-primary font-terminal text-3xl md:text-4xl tracking-[0.1em] uppercase glow-green">Mensaje Decodificado</h1>
+                </div>
+
+                <div class="w-full bg-background-dark/95 border-green p-6 md:p-10 relative flex flex-col gap-6 flicker">
+                    <div class="absolute -top-3 left-6 bg-background-dark px-3 text-primary font-bold text-[11px] tracking-tighter">CLEARANCE_LEVEL: S-011</div>
+                    
+                    <div class="space-y-6">
+                        <div class="border-b border-primary/30 pb-4">
+                            <h2 class="text-primary font-terminal text-2xl md:text-3xl tracking-wide uppercase glow-green typewriter" id="title-text">
+                                IDENTIFICACIÓN CONFIRMADA: LAIA MOLLET CABEZAS (LA ONCE)
+                            </h2>
+                        </div>
+
+                        <div class="space-y-4 text-sm md:text-base leading-relaxed">
+                            <div class="border-l-2 border-primary/40 pl-5 space-y-4">
+                                <p class="text-white typewriter" id="main-text" style="white-space: pre-wrap;"></p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8" id="info-grid" style="opacity: 0;">
+                                <div class="bg-primary/5 border border-primary/30 p-4 rounded">
+                                    <h3 class="text-xs font-bold tracking-widest mb-3 text-primary/70 uppercase underline">Tu Equipo:</h3>
+                                    <ul class="space-y-1 text-xs md:text-sm text-white">
+                                        <li>• <span class="font-bold text-primary">LAIA M.</span> (Capitana / Poderes Psíquicos)</li>
+                                        <li>• <span class="font-bold text-primary">JUDIT C.</span> (Mamá / Soporte Logístico)</li>
+                                        <li>• <span class="font-bold text-primary">LAIA B.</span> (Amiga / Exploradora)</li>
+                                        <li>• <span class="font-bold text-primary">ISAAC Y JUDIT</span> (Fuerzas de Choque)</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-primary/5 border border-primary/30 p-4 rounded flex flex-col justify-center">
+                                    <h3 class="text-xs font-bold tracking-widest mb-2 text-primary/70 uppercase underline">Día y Hora:</h3>
+                                    <p class="text-xl md:text-2xl font-black text-primary glow-green">06 / 02 / 2026</p>
+                                    <p class="text-lg font-bold text-white">18:00 H</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 pt-4 border-t border-primary/20" id="final-section" style="opacity: 0;">
+                                <p class="text-sm text-white">
+                                    ¿Estás lista para cruzar? El tiempo es una dimensión que no puedes controlar.
+                                    <span class="block mt-3 font-bold text-primary glow-green">
+                                        Ahora introduce el código, en el Criptex, recuerda el código: ONCEL.
+                                    </span>
+                                </p>
+                                <div class="mt-6 flex justify-center" id="cryptex-image" style="opacity: 0;">
+                                    <div class="border-2 border-primary/40 p-2 rounded bg-black/40 shadow-[0_0_30px_rgba(51,255,51,0.3)]">
+                                        <img src="/assets/images/foto.jpg" alt="Criptex con código ONCEL" class="max-w-full h-auto rounded" style="max-height: 400px; object-fit: contain;" />
+                                        <p class="text-center text-[10px] text-primary/70 mt-2 tracking-widest uppercase">Configuración del Criptex</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-center font-bold text-primary glow-green pt-6 text-sm md:text-base" id="final-text" style="opacity: 0;">
+                                NOS VEMOS EN EL OTRO LADO. CAMBIO Y CORTO.<span class="cursor-blink"></span>
+                            </p>
+                        </div>
+
+                        <div class="mt-8 flex justify-center" id="print-button" style="opacity: 0;">
+                            <button onclick="destroyMessage()" class="bg-primary text-black px-8 py-3 text-xs font-black tracking-[0.3em] uppercase rounded hover:scale-105 transition-transform shadow-[0_0_20px_rgba(51,255,51,0.3)] relative overflow-hidden group">
+                                <span class="relative z-10">⚠ AUTODESTRUIR MENSAJE ⚠</span>
+                                <div class="absolute inset-0 bg-red-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="mt-6 text-center opacity-40">
+                    <p class="text-[8px] font-mono tracking-widest text-primary uppercase">SISTEMA_ORIGEN: HNL_S011_V2 // REF: LONDIUM_EXPEDITION</p>
+                </footer>
+            </main>
         </div>
-    </div>
-
-    <!-- Final Result Screen -->
-    <div id="result-screen" class="hidden bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden p-10 text-center">
-        <h2 class="text-4xl font-bold text-blue-800 mb-4">¡Juego Terminado! 🎉</h2>
-        <div id="final-emoji" class="text-6xl mb-6">🏆</div>
-        <p class="text-2xl mb-6">Has acertado <span id="final-score" class="font-bold text-green-600">0</span> de <span id="total-questions">0</span></p>
-        <p id="final-message" class="mb-8 text-gray-600 font-bold px-4"></p>
-        <button onclick="location.reload()" class="bg-blue-600 text-white px-10 py-3 rounded-full font-bold text-xl hover:bg-blue-700">¡Intentarlo de nuevo!</button>
     </div>
 
     <script>
-        const quizData = [
-            // --- POSSESSIVE ADJECTIVES (1-20) ---
-            { q: "I have a new book. ___ book is interesting.", img: "📖", options: ["My", "His"], correct: "My", explanation: "Usamos 'My' porque el sujeto es 'I' (Yo)." },
-            { q: "She has a sister. ___ sister is 8 years old.", img: "👧", options: ["Her", "His"], correct: "Her", explanation: "Usamos 'Her' porque hablamos de una niña (She)." },
-            { q: "He has a big dog. ___ dog is brown.", img: "🐕", options: ["Your", "His"], correct: "His", explanation: "Usamos 'His' porque el dueño es un niño (He)." },
-            { q: "The bird is in ___ nest.", img: "🐦", options: ["Its", "Their"], correct: "Its", explanation: "Usamos 'Its' para animales o cosas en singular." },
-            { q: "We have a house. ___ house is small.", img: "🏠", options: ["Our", "Your"], correct: "Our", explanation: "Usamos 'Our' (nuestro) para nosotros (We)." },
-            { q: "They play football. ___ team is the best.", img: "⚽", options: ["Their", "Our"], correct: "Their", explanation: "Usamos 'Their' para ellos (They)." },
-            { q: "You have an umbrella. ___ umbrella is yellow.", img: "☂️", options: ["My", "Your"], correct: "Your", explanation: "Si tú tienes algo (You), es 'Your' (tu) paraguas." },
-            { q: "Mary and Paul have a baby. ___ baby is cute.", img: "👶", options: ["His", "Their"], correct: "Their", explanation: "Ellos son dos personas (They), usamos 'Their'." },
-            { q: "The car has 4 doors. ___ doors are white.", img: "🚗", options: ["Its", "Our"], correct: "Its", explanation: "Hablamos de las puertas del coche (objeto singular)." },
-            { q: "I have a brother. ___ name is Tom.", img: "👦", options: ["My", "His"], correct: "His", explanation: "Ojo: hablamos del nombre de él (He), por eso es 'His name'." },
-            { q: "She loves ___ cat very much.", img: "🐱", options: ["Her", "Its"], correct: "Her", explanation: "Ella ama a SU gato (de ella)." },
-            { q: "He lost ___ keys yesterday.", img: "🔑", options: ["His", "Her"], correct: "His", explanation: "Él perdió SUS llaves (de él)." },
-            { q: "We like ___ English teacher.", img: "👩‍🏫", options: ["Our", "Their"], correct: "Our", explanation: "Nos gusta NUESTRA profesora." },
-            { q: "You need to wash ___ hands.", img: "🧼", options: ["Your", "My"], correct: "Your", explanation: "Tú debes lavar TUS manos." },
-            { q: "The tree lost ___ leaves in autumn.", img: "🌳", options: ["Its", "Their"], correct: "Its", explanation: "El árbol (cosa singular) perdió SUS hojas." },
-            { q: "They forgot ___ homework at home.", img: "📝", options: ["Your", "Their"], correct: "Their", explanation: "Ellos olvidaron SU tarea." },
-            { q: "I am wearing ___ favorite shoes.", img: "👟", options: ["My", "His"], correct: "My", explanation: "Yo llevo puestos MIS zapatos." },
-            { q: "The girl is with ___ grandmother.", img: "👵", options: ["Her", "His"], correct: "Her", explanation: "La niña está con SU abuela." },
-            { q: "The phone is ringing. ___ screen is broken.", img: "📱", options: ["Its", "My"], correct: "Its", explanation: "La pantalla DEL teléfono (objeto)." },
-            { q: "We are painting ___ bedroom blue.", img: "🛏️", options: ["Our", "Their"], correct: "Our", explanation: "Estamos pintando NUESTRO cuarto." },
-
-            // --- PREPOSITIONS: in, on, under, next to, at, with, between (21-40) ---
-            { q: "The keys are ___ the table.", img: "🔑", options: ["On", "In"], correct: "On", explanation: "'On' es sobre la superficie." },
-            { q: "My dad is ___ work right now.", img: "💼", options: ["At", "On"], correct: "At", explanation: "Usamos 'At' para lugares específicos (at work, at school)." },
-            { q: "I am playing ___ my best friend.", img: "👫", options: ["With", "At"], correct: "With", explanation: "'With' significa 'con' (compañía)." },
-            { q: "The milk is ___ the fridge.", img: "🥛", options: ["In", "Under"], correct: "In", explanation: "'In' es dentro de un lugar." },
-            { q: "Wait for me ___ the bus stop.", img: "🚏", options: ["At", "On"], correct: "At", explanation: "'At' para puntos exactos como una parada de bus." },
-            { q: "I write ___ a pencil.", img: "✏️", options: ["With", "In"], correct: "With", explanation: "Usamos 'With' para indicar el instrumento (con un lápiz)." },
-            { q: "The slippers are ___ the bed.", img: "👡", options: ["Under", "At"], correct: "Under", explanation: "'Under' es debajo." },
-            { q: "She is ___ school from 9 to 5.", img: "🏫", options: ["At", "With"], correct: "At", explanation: "Estar en el colegio se dice 'At school'." },
-            { q: "Eat your soup ___ a spoon.", img: "🥣", options: ["With", "On"], correct: "With", explanation: "Comer CON una cuchara." },
-            { q: "The ball is ___ the two boxes.", img: "📦⚽📦", options: ["Between", "In"], correct: "Between", explanation: "'Between' es en medio de dos cosas." },
-            { q: "My birthday is ___ March.", img: "🎂", options: ["In", "On"], correct: "In", explanation: "Para los meses del año usamos 'In'." },
-            { q: "Look ___ that beautiful bird!", img: "🔭", options: ["At", "With"], correct: "At", explanation: "Mirar algo es 'Look AT'." },
-            { q: "I go to the park ___ my dog.", img: "🐕", options: ["With", "Under"], correct: "With", explanation: "Ir CON mi perro." },
-            { q: "The computer is ___ the desk.", img: "💻", options: ["On", "At"], correct: "On", explanation: "Está apoyado sobre el escritorio." },
-            { q: "The bank is ___ the supermarket.", img: "🏦🛒", options: ["Next to", "In"], correct: "Next to", explanation: "'Next to' es al lado de." },
-            { q: "Are you ___ home?", img: "🏠", options: ["At", "With"], correct: "At", explanation: "Estar en casa se dice 'At home'." },
-            { q: "The spider is ___ the ceiling.", img: "🕷️", options: ["On", "Under"], correct: "On", explanation: "Aunque esté 'colgando', toca la superficie del techo." },
-            { q: "I like bread ___ cheese.", img: "🥪", options: ["With", "At"], correct: "With", explanation: "Pan CON queso." },
-            { q: "The shoes are ___ the box.", img: "👟📦", options: ["In", "Between"], correct: "In", explanation: "Dentro de la caja." },
-            { q: "Sit ___ me, please.", img: "🪑", options: ["Next to", "At"], correct: "Next to", explanation: "Siéntate A MI LADO." }
-        ];
-
-        let currentQuestion = 0;
-        let score = 0;
-
-        const questionText = document.getElementById('question-text');
-        const optionsGrid = document.getElementById('options-grid');
-        const feedback = document.getElementById('feedback');
-        const feedbackMsg = document.getElementById('feedback-msg');
-        const feedbackExp = document.getElementById('feedback-explanation');
-        const progress = document.getElementById('progress');
-        const stats = document.getElementById('stats');
-        const imgPlaceholder = document.getElementById('image-placeholder');
-
-        function loadQuestion() {
-            const data = quizData[currentQuestion];
-            questionText.innerHTML = data.q;
-            imgPlaceholder.innerText = data.img;
-            optionsGrid.innerHTML = '';
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playDestructionSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
             
-            data.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.innerText = opt;
-                btn.className = "option-btn bg-blue-100 border-2 border-blue-400 p-4 rounded-2xl font-bold text-xl text-blue-800 hover:bg-blue-200 shadow-sm";
-                btn.onclick = () => checkAnswer(opt);
-                optionsGrid.appendChild(btn);
-            });
-
-            feedback.classList.add('hidden');
-            optionsGrid.classList.remove('hidden');
-            stats.innerText = `Pregunta ${currentQuestion + 1} de ${quizData.length}`;
-            progress.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
+            oscillator.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sawtooth';
+            filter.type = 'lowpass';
+            filter.frequency.value = 3000;
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.8);
+            filter.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.8);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.8);
         }
-
-        function checkAnswer(selected) {
-            const data = quizData[currentQuestion];
-            const isCorrect = selected === data.correct;
+        
+        function destroyMessage() {
+            const container = document.querySelector('.layout-container');
             
-            optionsGrid.classList.add('hidden');
-            feedback.classList.remove('hidden');
-
-            if (isCorrect) {
-                score++;
-                feedback.className = "mt-6 p-4 rounded-2xl text-center border-2 border-green-500 bg-green-50 bounce";
-                feedbackMsg.innerText = "✅ ¡GENIAL!";
-                feedbackMsg.className = "text-xl font-bold text-green-600 mb-2";
-            } else {
-                feedback.className = "mt-6 p-4 rounded-2xl text-center border-2 border-red-500 bg-red-50 shake";
-                feedbackMsg.innerText = "❌ ¡CUIDADO!";
-                feedbackMsg.className = "text-xl font-bold text-red-600 mb-2";
+            playDestructionSound();
+            container.classList.add('glitch-effect');
+            
+            setTimeout(() => {
+                window.location.href = 'https://www.google.com';
+            }, 800);
+        }
+        
+        setInterval(() => {
+            if (Math.random() > 0.92) {
+                const main = document.querySelector('main');
+                main.classList.add('vhs-tracking');
+                setTimeout(() => {
+                    main.classList.remove('vhs-tracking');
+                }, 500);
             }
-
-            feedbackExp.innerHTML = `La respuesta correcta es <b>${data.correct}</b>. <br> ${data.explanation}`;
-        }
-
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < quizData.length) {
-                loadQuestion();
-            } else {
-                showResults();
-            }
-        }
-
-        function showResults() {
-            document.getElementById('game-container').classList.add('hidden');
-            document.getElementById('result-screen').classList.remove('hidden');
-            document.getElementById('final-score').innerText = score;
-            document.getElementById('total-questions').innerText = quizData.length;
+        }, 5000);
+        
+        function playAmbientTension() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
             
-            const msg = document.getElementById('final-message');
-            const emoji = document.getElementById('final-emoji');
+            oscillator.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioContext.destination);
             
-            const percentage = (score / quizData.length) * 100;
-
-            if (percentage === 100) {
-                msg.innerText = "¡PERFECTO! Has respondido las 40 preguntas correctamente. ¡Eres una estrella!";
-                emoji.innerText = "🏆👑";
-            } else if (percentage >= 80) {
-                msg.innerText = "¡Excelente! Estás muy lista para el examen de inglés.";
-                emoji.innerText = "🌟✨";
-            } else if (percentage >= 50) {
-                msg.innerText = "¡Bien hecho! Pero recuerda repasar los fallos para mejorar.";
-                emoji.innerText = "👍📚";
-            } else {
-                msg.innerText = "Sigue practicando un poco más. ¡Tú puedes hacerlo!";
-                emoji.innerText = "💪🔋";
+            oscillator.frequency.value = 30 + Math.random() * 15;
+            oscillator.type = 'sine';
+            filter.type = 'lowpass';
+            filter.frequency.value = 150;
+            
+            gainNode.gain.setValueAtTime(0.008, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.02, audioContext.currentTime + 3);
+            gainNode.gain.linearRampToValueAtTime(0.008, audioContext.currentTime + 6);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 6);
+        }
+        
+        setInterval(() => {
+            if (Math.random() > 0.6) {
+                playAmbientTension();
             }
+        }, 12000);
+        
+        function typeWriter(element, text, speed = 20, callback) {
+            element.innerHTML = '';
+            element.style.display = 'block';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            
+            type();
         }
 
-        // Iniciar
-        window.onload = loadQuestion;
+        function fadeIn(element, duration = 1000) {
+            element.style.transition = `opacity ${duration}ms ease-in`;
+            element.style.opacity = '1';
+        }
+
+        window.addEventListener('load', () => {
+            const titleEl = document.getElementById('title-text');
+            const mainText = document.getElementById('main-text');
+            const infoGrid = document.getElementById('info-grid');
+            const finalSection = document.getElementById('final-section');
+            const cryptexImage = document.getElementById('cryptex-image');
+            const finalText = document.getElementById('final-text');
+            const printButton = document.getElementById('print-button');
+
+            const titleOriginal = titleEl.textContent;
+            
+            const mainTextContent = `INITIALIZING DECODED TELEMETRY...
+
+Has demostrado que tu conexión con Hawkins es total. Has identificado a ONCE y eso ha estabilizado la brecha.
+
+Pero cuidado: el portal no lleva al Mundo del Revés. Se ha desviado hacia LONDIUM. Un Londres lleno de secretos, vapor y sombras.
+
+Misión de 90 minutos activada en Montcada i Reixac.`;
+
+            setTimeout(() => {
+                typeWriter(titleEl, titleOriginal, 20, () => {
+                    setTimeout(() => {
+                        typeWriter(mainText, mainTextContent, 15, () => {
+                            setTimeout(() => {
+                                fadeIn(infoGrid, 1500);
+                                setTimeout(() => {
+                                    fadeIn(finalSection, 1500);
+                                    setTimeout(() => {
+                                        fadeIn(cryptexImage, 1500);
+                                        setTimeout(() => {
+                                            fadeIn(finalText, 1500);
+                                            setTimeout(() => {
+                                                fadeIn(printButton, 1500);
+                                            }, 500);
+                                        }, 500);
+                                    }, 500);
+                                }, 500);
+                            }, 500);
+                        });
+                    }, 800);
+                });
+            }, 500);
+        });
     </script>
 </body>
 </html>
