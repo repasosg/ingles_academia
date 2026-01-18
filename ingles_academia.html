@@ -55,7 +55,7 @@
             <div class="mt-4 bg-yellow-200 rounded-full h-4 overflow-hidden border-2 border-yellow-600">
                 <div id="progress" class="progress-bar bg-green-500 h-full w-0"></div>
             </div>
-            <p id="stats" class="text-blue-700 font-bold mt-2 text-lg">Cargando aventuras...</p>
+            <p id="stats" class="text-blue-700 font-bold mt-2 text-lg">Cargando...</p>
         </div>
 
         <!-- Question Area -->
@@ -82,58 +82,58 @@
 
     <!-- Final Result Screen -->
     <div id="result-screen" class="hidden bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden p-10 text-center">
-        <h2 class="text-4xl font-bold text-blue-800 mb-4">¡Prueba Finalizada! 🎉</h2>
+        <h2 class="text-4xl font-bold text-blue-800 mb-4">¡Juego Terminado! 🎉</h2>
         <div id="final-emoji" class="text-6xl mb-6">🏆</div>
         <p class="text-2xl mb-6">Has acertado <span id="final-score" class="font-bold text-green-600">0</span> de <span id="total-questions">0</span></p>
-        <p id="final-message" class="mb-8 text-gray-600 font-bold text-lg"></p>
-        <button onclick="location.reload()" class="bg-blue-600 text-white px-10 py-3 rounded-full font-bold text-xl hover:bg-blue-700 shadow-lg">¡Intentar otra vez!</button>
+        <p id="final-message" class="mb-8 text-gray-600 font-bold px-4"></p>
+        <button onclick="location.reload()" class="bg-blue-600 text-white px-10 py-3 rounded-full font-bold text-xl hover:bg-blue-700">¡Intentarlo de nuevo!</button>
     </div>
 
     <script>
         const quizData = [
             // --- POSSESSIVE ADJECTIVES (1-20) ---
-            { q: "I have a new book. ___ book is interesting.", img: "📖", options: ["My", "Your"], correct: "My", explanation: "Usamos 'My' porque yo (I) soy el dueño." },
-            { q: "She has a brother. ___ brother is tall.", img: "👦", options: ["Her", "His"], correct: "Her", explanation: "Usamos 'Her' para hablar de algo que le pertenece a una niña (She)." },
-            { q: "He has a big dog. ___ dog is friendly.", img: "🐕", options: ["His", "Her"], correct: "His", explanation: "Usamos 'His' para algo que le pertenece a un niño (He)." },
-            { q: "The bird is in ___ nest.", img: "🐦", options: ["Its", "Their"], correct: "Its", explanation: "Usamos 'Its' para animales u objetos en singular." },
-            { q: "We have a house. ___ house is small.", img: "🏠", options: ["Our", "Their"], correct: "Our", explanation: "Usamos 'Our' (nuestro) cuando los dueños somos nosotros (We)." },
-            { q: "They have a car. ___ car is fast.", img: "🏎️", options: ["Your", "Their"], correct: "Their", explanation: "Usamos 'Their' para hablar de algo que es de ellos (They)." },
-            { q: "You have a pen. Is it ___ pen?", img: "🖋️", options: ["Your", "My"], correct: "Your", explanation: "Si tú (You) tienes el boli, es tu (Your) boli." },
-            { q: "Mary has a doll. ___ doll is beautiful.", img: "🪆", options: ["Her", "His"], correct: "Her", explanation: "Mary es 'She', por eso usamos 'Her'." },
-            { q: "Peter has a blue ball. ___ ball is blue.", img: "🔵", options: ["His", "Her"], correct: "His", explanation: "Peter es 'He', por eso usamos 'His'." },
-            { q: "The cat has a long tail. ___ tail is black.", img: "🐈", options: ["Its", "Our"], correct: "Its", explanation: "Es la cola del gato (objeto/animal), usamos 'Its'." },
-            { q: "We love ___ school.", img: "🏫", options: ["Our", "Their"], correct: "Our", explanation: "Si nosotros (We) la amamos, es nuestra (Our) escuela." },
-            { q: "The students have books. ___ books are on the desk.", img: "📚", options: ["Their", "Your"], correct: "Their", explanation: "Los estudiantes son 'ellos' (They), usamos 'Their'." },
-            { q: "I am wearing ___ favorite T-shirt.", img: "👕", options: ["My", "His"], correct: "My", explanation: "Si la llevo puesta yo (I), es mi (My) camiseta." },
-            { q: "You and your sister have a cat. ___ cat is cute.", img: "🐱", options: ["Your", "Our"], correct: "Your", explanation: "Hablamos de 'vosotros' (You), por eso usamos 'Your'." },
-            { q: "My father has a computer. ___ computer is new.", img: "💻", options: ["His", "Her"], correct: "His", explanation: "Padre es masculino (He), usamos 'His'." },
-            { q: "The tree has flowers. ___ flowers are pink.", img: "🌸", options: ["Its", "Their"], correct: "Its", explanation: "Un árbol es una cosa singular, usamos 'Its'." },
-            { q: "The girls have umbrellas. ___ umbrellas are wet.", img: "☔", options: ["Their", "Her"], correct: "Their", explanation: "Son varias niñas (They), usamos 'Their'." },
-            { q: "Tom and I have a secret. ___ secret is safe.", img: "🤫", options: ["Our", "My"], correct: "Our", explanation: "Tom y yo somos 'nosotros' (We), usamos 'Our'." },
-            { q: "She is brushing ___ teeth.", img: "🪥", options: ["Her", "His"], correct: "Her", explanation: "Ella (She) se cepilla sus (Her) dientes." },
-            { q: "Do you have ___ homework?", img: "📝", options: ["Your", "My"], correct: "Your", explanation: "Te pregunto si tú (You) tienes tu (Your) tarea." },
+            { q: "I have a new book. ___ book is interesting.", img: "📖", options: ["My", "His"], correct: "My", explanation: "Usamos 'My' porque el sujeto es 'I' (Yo)." },
+            { q: "She has a sister. ___ sister is 8 years old.", img: "👧", options: ["Her", "His"], correct: "Her", explanation: "Usamos 'Her' porque hablamos de una niña (She)." },
+            { q: "He has a big dog. ___ dog is brown.", img: "🐕", options: ["Your", "His"], correct: "His", explanation: "Usamos 'His' porque el dueño es un niño (He)." },
+            { q: "The bird is in ___ nest.", img: "🐦", options: ["Its", "Their"], correct: "Its", explanation: "Usamos 'Its' para animales o cosas en singular." },
+            { q: "We have a house. ___ house is small.", img: "🏠", options: ["Our", "Your"], correct: "Our", explanation: "Usamos 'Our' (nuestro) para nosotros (We)." },
+            { q: "They play football. ___ team is the best.", img: "⚽", options: ["Their", "Our"], correct: "Their", explanation: "Usamos 'Their' para ellos (They)." },
+            { q: "You have an umbrella. ___ umbrella is yellow.", img: "☂️", options: ["My", "Your"], correct: "Your", explanation: "Si tú tienes algo (You), es 'Your' (tu) paraguas." },
+            { q: "Mary and Paul have a baby. ___ baby is cute.", img: "👶", options: ["His", "Their"], correct: "Their", explanation: "Ellos son dos personas (They), usamos 'Their'." },
+            { q: "The car has 4 doors. ___ doors are white.", img: "🚗", options: ["Its", "Our"], correct: "Its", explanation: "Hablamos de las puertas del coche (objeto singular)." },
+            { q: "I have a brother. ___ name is Tom.", img: "👦", options: ["My", "His"], correct: "His", explanation: "Ojo: hablamos del nombre de él (He), por eso es 'His name'." },
+            { q: "She loves ___ cat very much.", img: "🐱", options: ["Her", "Its"], correct: "Her", explanation: "Ella ama a SU gato (de ella)." },
+            { q: "He lost ___ keys yesterday.", img: "🔑", options: ["His", "Her"], correct: "His", explanation: "Él perdió SUS llaves (de él)." },
+            { q: "We like ___ English teacher.", img: "👩‍🏫", options: ["Our", "Their"], correct: "Our", explanation: "Nos gusta NUESTRA profesora." },
+            { q: "You need to wash ___ hands.", img: "🧼", options: ["Your", "My"], correct: "Your", explanation: "Tú debes lavar TUS manos." },
+            { q: "The tree lost ___ leaves in autumn.", img: "🌳", options: ["Its", "Their"], correct: "Its", explanation: "El árbol (cosa singular) perdió SUS hojas." },
+            { q: "They forgot ___ homework at home.", img: "📝", options: ["Your", "Their"], correct: "Their", explanation: "Ellos olvidaron SU tarea." },
+            { q: "I am wearing ___ favorite shoes.", img: "👟", options: ["My", "His"], correct: "My", explanation: "Yo llevo puestos MIS zapatos." },
+            { q: "The girl is with ___ grandmother.", img: "👵", options: ["Her", "His"], correct: "Her", explanation: "La niña está con SU abuela." },
+            { q: "The phone is ringing. ___ screen is broken.", img: "📱", options: ["Its", "My"], correct: "Its", explanation: "La pantalla DEL teléfono (objeto)." },
+            { q: "We are painting ___ bedroom blue.", img: "🛏️", options: ["Our", "Their"], correct: "Our", explanation: "Estamos pintando NUESTRO cuarto." },
 
-            // --- PREPOSITIONS (21-40) ---
-            { q: "The ball is ___ the box.", img: "📦⚽", options: ["In", "On"], correct: "In", explanation: "'In' significa que está dentro." },
-            { q: "The book is ___ the table.", img: "📕🪜", options: ["On", "Under"], correct: "On", explanation: "'On' significa sobre la superficie." },
-            { q: "The shoes are ___ the bed.", img: "👞🛌", options: ["Under", "In"], correct: "Under", explanation: "'Under' significa debajo de la cama." },
-            { q: "The teacher is standing ___ the board.", img: "👩‍🏫⬜", options: ["Next to", "Between"], correct: "Next to", explanation: "'Next to' significa al lado de." },
-            { q: "The apple is ___ the two boxes.", img: "📦🍎📦", options: ["Between", "In"], correct: "Between", explanation: "'Between' se usa cuando algo está en medio de dos cosas." },
-            { q: "The boy is ___ the TV.", img: "👦📺", options: ["In front of", "Under"], correct: "In front of", explanation: "'In front of' significa delante de la televisión." },
-            { q: "The milk is ___ the fridge.", img: "🥛🧊", options: ["In", "On"], correct: "In", explanation: "La leche está dentro (In) de la nevera." },
-            { q: "The clock is ___ the wall.", img: "🕐🧱", options: ["On", "In"], correct: "On", explanation: "En superficies verticales como paredes usamos 'On'." },
-            { q: "The car is ___ the garage.", img: "🚗🏠", options: ["In", "Under"], correct: "In", explanation: "El coche está dentro (In) del garaje." },
-            { q: "The keys are ___ the sofa.", img: "🔑🛋️", options: ["Next to", "Between"], correct: "Next to", explanation: "Están al lado (Next to) del sofá." },
-            { q: "The ruler is ___ the pencil and the pen.", img: "✏️📏🖊️", options: ["Between", "On"], correct: "Between", explanation: "Está en medio de dos objetos, usamos 'Between'." },
-            { q: "The carpet is ___ the floor.", img: "🧶🏢", options: ["On", "Under"], correct: "On", explanation: "La alfombra está sobre (On) el suelo." },
-            { q: "The cat is hiding ___ the chair.", img: "🪑🐈", options: ["Under", "In front of"], correct: "Under", explanation: "Se esconde debajo (Under) de la silla." },
-            { q: "The supermarket is ___ the cinema.", img: "🛒🎬", options: ["Next to", "On"], correct: "Next to", explanation: "Está al lado (Next to) del cine." },
-            { q: "The flowers are ___ the vase.", img: "🏺🌻", options: ["In", "Under"], correct: "In", explanation: "Las flores están dentro (In) del jarrón." },
-            { q: "The computer is ___ the desk.", img: "🖥️table", options: ["On", "In"], correct: "On", explanation: "El ordenador está sobre (On) la mesa." },
-            { q: "The baby is sitting ___ the parents.", img: "👨‍👩‍👧", options: ["Between", "On"], correct: "Between", explanation: "El bebé está en medio (Between) de sus padres." },
-            { q: "The remote control is ___ the TV.", img: "🕹️📺", options: ["In front of", "In"], correct: "In front of", explanation: "Está delante (In front of) de la tele." },
-            { q: "The lamp is ___ the bed.", img: "🛌💡", options: ["Next to", "Between"], correct: "Next to", explanation: "Está al lado (Next to) de la cama." },
-            { q: "The bread is ___ the basket.", img: "🧺🥖", options: ["In", "On"], correct: "In", explanation: "El pan está dentro (In) de la cesta." }
+            // --- PREPOSITIONS: in, on, under, next to, at, with, between (21-40) ---
+            { q: "The keys are ___ the table.", img: "🔑", options: ["On", "In"], correct: "On", explanation: "'On' es sobre la superficie." },
+            { q: "My dad is ___ work right now.", img: "💼", options: ["At", "On"], correct: "At", explanation: "Usamos 'At' para lugares específicos (at work, at school)." },
+            { q: "I am playing ___ my best friend.", img: "👫", options: ["With", "At"], correct: "With", explanation: "'With' significa 'con' (compañía)." },
+            { q: "The milk is ___ the fridge.", img: "🥛", options: ["In", "Under"], correct: "In", explanation: "'In' es dentro de un lugar." },
+            { q: "Wait for me ___ the bus stop.", img: "🚏", options: ["At", "On"], correct: "At", explanation: "'At' para puntos exactos como una parada de bus." },
+            { q: "I write ___ a pencil.", img: "✏️", options: ["With", "In"], correct: "With", explanation: "Usamos 'With' para indicar el instrumento (con un lápiz)." },
+            { q: "The slippers are ___ the bed.", img: "👡", options: ["Under", "At"], correct: "Under", explanation: "'Under' es debajo." },
+            { q: "She is ___ school from 9 to 5.", img: "🏫", options: ["At", "With"], correct: "At", explanation: "Estar en el colegio se dice 'At school'." },
+            { q: "Eat your soup ___ a spoon.", img: "🥣", options: ["With", "On"], correct: "With", explanation: "Comer CON una cuchara." },
+            { q: "The ball is ___ the two boxes.", img: "📦⚽📦", options: ["Between", "In"], correct: "Between", explanation: "'Between' es en medio de dos cosas." },
+            { q: "My birthday is ___ March.", img: "🎂", options: ["In", "On"], correct: "In", explanation: "Para los meses del año usamos 'In'." },
+            { q: "Look ___ that beautiful bird!", img: "🔭", options: ["At", "With"], correct: "At", explanation: "Mirar algo es 'Look AT'." },
+            { q: "I go to the park ___ my dog.", img: "🐕", options: ["With", "Under"], correct: "With", explanation: "Ir CON mi perro." },
+            { q: "The computer is ___ the desk.", img: "💻", options: ["On", "At"], correct: "On", explanation: "Está apoyado sobre el escritorio." },
+            { q: "The bank is ___ the supermarket.", img: "🏦🛒", options: ["Next to", "In"], correct: "Next to", explanation: "'Next to' es al lado de." },
+            { q: "Are you ___ home?", img: "🏠", options: ["At", "With"], correct: "At", explanation: "Estar en casa se dice 'At home'." },
+            { q: "The spider is ___ the ceiling.", img: "🕷️", options: ["On", "Under"], correct: "On", explanation: "Aunque esté 'colgando', toca la superficie del techo." },
+            { q: "I like bread ___ cheese.", img: "🥪", options: ["With", "At"], correct: "With", explanation: "Pan CON queso." },
+            { q: "The shoes are ___ the box.", img: "👟📦", options: ["In", "Between"], correct: "In", explanation: "Dentro de la caja." },
+            { q: "Sit ___ me, please.", img: "🪑", options: ["Next to", "At"], correct: "Next to", explanation: "Siéntate A MI LADO." }
         ];
 
         let currentQuestion = 0;
@@ -157,7 +157,7 @@
             data.options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.innerText = opt;
-                btn.className = "option-btn bg-blue-100 border-2 border-blue-400 p-4 rounded-2xl font-bold text-xl text-blue-800 hover:bg-blue-200 shadow-md";
+                btn.className = "option-btn bg-blue-100 border-2 border-blue-400 p-4 rounded-2xl font-bold text-xl text-blue-800 hover:bg-blue-200 shadow-sm";
                 btn.onclick = () => checkAnswer(opt);
                 optionsGrid.appendChild(btn);
             });
@@ -182,7 +182,7 @@
                 feedbackMsg.className = "text-xl font-bold text-green-600 mb-2";
             } else {
                 feedback.className = "mt-6 p-4 rounded-2xl text-center border-2 border-red-500 bg-red-50 shake";
-                feedbackMsg.innerText = "❌ ¡VAYA!";
+                feedbackMsg.innerText = "❌ ¡CUIDADO!";
                 feedbackMsg.className = "text-xl font-bold text-red-600 mb-2";
             }
 
@@ -210,22 +210,22 @@
             const percentage = (score / quizData.length) * 100;
 
             if (percentage === 100) {
-                msg.innerText = "¡Nivel Experto! Has dominado el inglés. ¡Ese 10 está asegurado!";
-                emoji.innerText = "👑";
+                msg.innerText = "¡PERFECTO! Has respondido las 40 preguntas correctamente. ¡Eres una estrella!";
+                emoji.innerText = "🏆👑";
             } else if (percentage >= 80) {
-                msg.innerText = "¡Excelente trabajo! Estás muy preparada para el examen.";
-                emoji.innerText = "🌟";
+                msg.innerText = "¡Excelente! Estás muy lista para el examen de inglés.";
+                emoji.innerText = "🌟✨";
             } else if (percentage >= 50) {
-                msg.innerText = "¡Buen esfuerzo! Repasa un poco más las explicaciones y lo lograrás.";
-                emoji.innerText = "👍";
+                msg.innerText = "¡Bien hecho! Pero recuerda repasar los fallos para mejorar.";
+                emoji.innerText = "👍📚";
             } else {
-                msg.innerText = "¡No te rindas! Vuelve a jugar para aprender todas las respuestas.";
-                emoji.innerText = "💪";
+                msg.innerText = "Sigue practicando un poco más. ¡Tú puedes hacerlo!";
+                emoji.innerText = "💪🔋";
             }
         }
 
-        // Iniciar el juego al cargar
-        loadQuestion();
+        // Iniciar
+        window.onload = loadQuestion;
     </script>
 </body>
 </html>
